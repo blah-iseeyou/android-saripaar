@@ -146,6 +146,7 @@ public class Validator {
     private boolean mOrderedFields;
     private boolean mValidateInvisibleViews;
     private boolean mFullViewsList;
+    private boolean validate = false;
     private SequenceComparator mSequenceComparator;
     private ViewValidatedAction mViewValidatedAction;
     private Handler mViewValidatedActionHandler;
@@ -766,7 +767,7 @@ public class Validator {
     private void triggerValidationListenerCallback(final ValidationReport validationReport) {
         final List<ValidationError> validationErrors = validationReport.errors;
 
-        if (validationErrors.size() == 0 && !validationReport.hasMoreErrors) {
+        if (!this.validate && !validationReport.hasMoreErrors) {
             mValidationListener.onValidationSucceeded();
         } else {
             mValidationListener.onValidationFailed(validationErrors);
@@ -800,6 +801,8 @@ public class Validator {
         // Does the form have more errors? Used in validateTill()
         boolean hasMoreErrors = false;
 
+        validate = false;
+
         validation:
         for (View view : views) {
             List<Pair<Rule, ViewDataAdapter>> ruleAdapterPairs = viewRulesMap.get(view);
@@ -832,7 +835,10 @@ public class Validator {
                             failedRules = new ArrayList<Rule>();
                             validationErrors.add(new ValidationError(view, failedRules));
                         }
-                        if(failedRule != null) failedRules.add(failedRule);
+                        if(failedRule != null) {
+                            failedRules.add(failedRule);
+                            if (!validate) validate = true;
+                        }
                     } else {
                         hasMoreErrors = true;
                     }

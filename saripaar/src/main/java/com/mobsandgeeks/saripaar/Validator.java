@@ -145,6 +145,7 @@ public class Validator {
     private Map<View, ArrayList<Pair<Annotation, ViewDataAdapter>>> mOptionalViewsMap;
     private boolean mOrderedFields;
     private boolean mValidateInvisibleViews;
+    private boolean mFullViewsList;
     private SequenceComparator mSequenceComparator;
     private ViewValidatedAction mViewValidatedAction;
     private Handler mViewValidatedActionHandler;
@@ -780,11 +781,17 @@ public class Validator {
         }
     }
 
+
+    public void setFullViewsList(boolean mFullViewsList) {
+        this.mFullViewsList = mFullViewsList;
+    }
+
     private ValidationReport getValidationReport(final View targetView,
-            final Map<View, ArrayList<Pair<Rule, ViewDataAdapter>>> viewRulesMap,
-                    final Mode validationMode) {
+                                                 final Map<View, ArrayList<Pair<Rule, ViewDataAdapter>>> viewRulesMap,
+                                                 final Mode validationMode) {
 
         final List<ValidationError> validationErrors = new ArrayList<ValidationError>();
+        final List<ValidationError> completeValidationErrors = new ArrayList<ValidationError>();
         final Set<View> views = viewRulesMap.keySet();
 
         // Don't add errors for views that are placed after the specified view in validateTill()
@@ -819,13 +826,13 @@ public class Validator {
                         view, ruleAdapterPair.first, ruleAdapterPair.second);
                 boolean isLastRuleForView = i + 1 == nRules;
 
-                if (failedRule != null) {
+                if (mFullViewsList || failedRule != null) {
                     if (addErrorToReport) {
                         if (failedRules == null) {
                             failedRules = new ArrayList<Rule>();
                             validationErrors.add(new ValidationError(view, failedRules));
                         }
-                        failedRules.add(failedRule);
+                        if(failedRule != null) failedRules.add(failedRule);
                     } else {
                         hasMoreErrors = true;
                     }

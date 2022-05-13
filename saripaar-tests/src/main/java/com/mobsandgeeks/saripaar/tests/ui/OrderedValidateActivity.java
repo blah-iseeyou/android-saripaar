@@ -16,6 +16,7 @@ package com.mobsandgeeks.saripaar.tests.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -79,6 +80,7 @@ public class OrderedValidateActivity extends Activity
         // Validator
         mValidator = new Validator(this);
         mValidator.setValidationListener(this);
+        mValidator.setFullViewsList(true);
 
         // Event listeners
         modeRadioGroup.setOnCheckedChangeListener(this);
@@ -98,7 +100,28 @@ public class OrderedValidateActivity extends Activity
 
     @Override
     public void onValidationFailed(List<ValidationError> errors) {
-        mResultTextView.setText(Common.getFailedFieldNames(errors));
+        for (ValidationError error : errors) {
+            View view = error.getView();
+
+            Log.d("AA", String.valueOf(error.getFailedRules().size() ));
+            if (error.getFailedRules().size() > 0) {
+                String message = error.getCollatedErrorMessage(this);
+                Log.e("Error:    ", message);
+            }else {
+                Log.d("Success:  ", " Exito");
+            }
+
+
+
+            // Display error messages ;)
+//            if (view instanceof TextInputLayout) {
+////                ((TextInputLayout)(view)).setErrorEnabled(true);
+////                ((TextInputLayout)(view)).setError(message);
+//            } else {
+//                Log.e("Error", message);
+//            }
+        }
+//        mResultTextView.setText(Common.getFailedFieldNames(errors));
     }
 
     @Override

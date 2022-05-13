@@ -71,6 +71,8 @@ public class ValidationError {
     public String getCollatedErrorMessage(final Context context) {
         StringBuilder stringBuilder = new StringBuilder();
         for (Rule failedRule : failedRules) {
+
+            if (failedRule == null) continue;
             String message = failedRule.getMessage(context).trim();
             if (message.length() > 0) {
                 stringBuilder.append(message).append('\n');

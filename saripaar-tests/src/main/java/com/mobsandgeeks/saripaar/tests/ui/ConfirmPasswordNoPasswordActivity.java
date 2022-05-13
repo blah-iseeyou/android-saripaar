@@ -66,9 +66,10 @@ public class ConfirmPasswordNoPasswordActivity extends Activity
         }
     }
 
+
     @Override
-    public void onValidationSucceeded() {
-        mResultTextView.setText(R.string.success);
+    public void onValidationSucceeded(List<ValidationError> errors) {
+        mResultTextView.setText("SUCCESS");
     }
 
     @Override

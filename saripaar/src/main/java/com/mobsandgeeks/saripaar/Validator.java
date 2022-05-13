@@ -112,7 +112,7 @@ import java.util.Set;
  * {@link com.mobsandgeeks.saripaar.Validator.ValidationListener} that reports the outcome of the
  * validation.
  * <ul>
- *      <li> {@link com.mobsandgeeks.saripaar.Validator.ValidationListener#onValidationSucceeded()}
+ *      <li> {@link com.mobsandgeeks.saripaar.Validator.ValidationListener#onValidationSucceeded(List<ValidationError> errors)}
  *          is called if all {@link com.mobsandgeeks.saripaar.Rule}s pass.
  *      </li>
  *      <li>
@@ -768,7 +768,7 @@ public class Validator {
         final List<ValidationError> validationErrors = validationReport.errors;
 
         if (!this.validate && !validationReport.hasMoreErrors) {
-            mValidationListener.onValidationSucceeded();
+            mValidationListener.onValidationSucceeded(validationErrors);
         } else {
             mValidationListener.onValidationFailed(validationErrors);
         }
@@ -963,7 +963,7 @@ public class Validator {
         /**
          * Called when all {@link com.mobsandgeeks.saripaar.Rule}s pass.
          */
-        void onValidationSucceeded();
+        void onValidationSucceeded(List<ValidationError> errors);
 
         /**
          * Called when one or several {@link com.mobsandgeeks.saripaar.Rule}s fail.

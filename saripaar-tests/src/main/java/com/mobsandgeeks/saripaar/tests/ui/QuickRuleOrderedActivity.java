@@ -82,7 +82,7 @@ public class QuickRuleOrderedActivity extends Activity
     }
 
     @Override
-    public void onValidationSucceeded() {
+    public void onValidationSucceeded(List<ValidationError> errors) {
         mResultTextView.setText(R.string.success);
     }
 
